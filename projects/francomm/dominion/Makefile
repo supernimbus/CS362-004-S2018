@@ -33,41 +33,18 @@ runtests: testDrawCard
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
-all: playdom player 
-
-default: unittestresults.out
-
-tests.out: unittest1.c unittest2.c unittest3.c unittest4.c
-	echo "Result for running dominion tests (Assignment 3):" > unittestresults.out
-
-	echo "unittest1.c" >> unittestresults.out
-	gcc -o unittest1 -g unittest1.c dominion.o rngs.o $(CFLAGS)
-	unittest1 >> unittestresults.out
-	
+all: playdom player unitTest1
 
 
+unitTest1: unittest1.c dominion.o rngs.o
+	gcc -o unitTest1 -g unittest1.c dominion.o rngs.o $(CFLAGS)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	gcov dominion.c >> unittestresults.out
-	cat dominion.c.gocv >> unittestresults.out
-
-
-
-
+runAllTests: unitTest1
+	echo -e "Result for running dominion tests (Assignment 3):\n" > unittestresults.out
+	./unitTest1 >> unittestresults.out	
+	gcov -b - u dominion.c >> unittestresults.out
+	cat dominion.c.gcov >> unittestresults.out
 
 
 clean:

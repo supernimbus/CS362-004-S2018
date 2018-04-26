@@ -19,10 +19,10 @@ void customAssert(int boolIn);
 
 void customAssert(int boolIn) {
 	if (boolIn == 1) {
-		printf("TEST PASSED!\n")
+		printf("TEST PASSED!\n");
 	}
 	if (boolIn == 0) {
-		printf("******TEST FAILED!******\n")
+		printf("******TEST FAILED!******\n");
 	}
 }
 
@@ -57,7 +57,7 @@ int main() {
     	coppers[i] = copper;
     	silvers[i] = silver;
     	golds[i] = gold;
-    	noCoins[i] = test;
+    	noCoins[i] = curse;
     	if (i % 2 == 0) {
     		copper_silver[i] = copper;
     		copper_gold[i] = copper;
@@ -71,7 +71,7 @@ int main() {
 
     }
 
-    printf("******TESTING updateCoins() ******\n")
+    printf("******TESTING updateCoins() ******\n");
     for (p = 0; p < numPlayer; p++) {
     	for (handCount = 1; handCount <= testHandSize; handCount++) {
     		for (bonus = 0; bonus <= maxBonus; bonus++) {
@@ -87,6 +87,7 @@ int main() {
 				memcpy(G.hand[p], coppers, sizeof(int) * handCount); 
 				updateCoins(p, &G, bonus);
 				#if (NOISY_TEST == 1)
+					printf("Test case 1: hand only contains copper coins");
                 	printf("G.coins = %d, expected = %d\n", G.coins, handCount * 1 + bonus);
             	#endif
                 customAssert(G.coins == handCount * 1 + bonus);
@@ -96,6 +97,7 @@ int main() {
 				memcpy(G.hand[p], silvers, sizeof(int) * handCount); 
 				updateCoins(p, &G, bonus);
 				#if (NOISY_TEST == 1)
+					printf("Test case 2: hand only contains silver coins");
                 	printf("G.coins = %d, expected = %d\n", G.coins, handCount * 2 + bonus);
             	#endif
                 customAssert(G.coins == handCount * 2 + bonus);
@@ -105,6 +107,7 @@ int main() {
 				memcpy(G.hand[p], golds, sizeof(int) * handCount); 
 				updateCoins(p, &G, bonus);
                 #if (NOISY_TEST == 1)
+					printf("Test case 3: hand only contains gold coins");
                 	printf("G.coins = %d, expected = %d\n", G.coins, handCount * 3 + bonus);
             	#endif
                 customAssert(G.coins == handCount * 3 + bonus);
@@ -113,13 +116,17 @@ int main() {
                 memcpy(G.hand[p], noCoins, sizeof(int) * handCount); 
 				updateCoins(p, &G, bonus);
                 #if (NOISY_TEST == 1)
+					printf("Test case 4: hand contains no coins");
                 	printf("G.coins = %d, expected = %d\n", G.coins, handCount * 0 + bonus);
             	#endif
                 customAssert(G.coins == bonus);
-
-
+					
+				
+				accum_copperSilver = 0;
+				accum_copperGold = 0;
+				accum_silverGold = 0;
                 //add up coins for cases in which hand is a mix of coins
-                for(i = 0; i < testHandSize; i++) {
+                for(i = 0; i < handCount; i++) {
                 	if (i % 2 ==0) {
                 		accum_copperSilver += 1;
                 		accum_copperGold += 1;
@@ -137,6 +144,7 @@ int main() {
                 memcpy(G.hand[p], copper_silver, sizeof(int) * handCount); 
 				updateCoins(p, &G, bonus);
 				#if (NOISY_TEST == 1)
+					printf("Test case 5: hand contains copper and silver coins");
                 	printf("G.coins = %d, expected = %d\n", G.coins, accum_copperSilver + bonus);
             	#endif
                 customAssert(G.coins == accum_copperSilver + bonus);
@@ -162,7 +170,7 @@ int main() {
     	}
     }
 
-    printf("*************END OF TEST RESULTS******************")
+    printf("*************END OF TEST RESULTS******************");
 
 	return 0;
 }
